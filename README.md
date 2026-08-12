@@ -1,13 +1,15 @@
 # FitAI — AI Clothing Recommendation & Virtual Try-On
 
-FitAI is a research-focused fashion e-commerce prototype that combines personalized clothing recommendations with AI-powered virtual try-on.
+FitAI is a research-focused fashion e-commerce prototype combining personalized clothing recommendations with AI-powered virtual try-on.
 
-The project supports a controlled comparison between:
+## Project overview
 
-- **FitAI experience** — preference-based product ranking and virtual try-on
-- **Standard store experience** — a conventional product catalogue using the same products, prices, images, and stock
+This project supports a controlled comparison between two shopping experiences:
 
-## Features
+- **FitAI** — preference-based product ranking and AI virtual try-on
+- **Standard store** — a conventional catalogue using the same products, prices, images, and stock
+
+## Key features
 
 - Preference-based clothing recommendations
 - Ranked top-three product matches
@@ -15,25 +17,27 @@ The project supports a controlled comparison between:
 - Shared catalogue of 16 clothing products
 - Standard comparison storefront for user studies
 - Responsive browser interface
-- Flask backend with secure environment-variable configuration
+- Secure Flask backend configuration
+- Render-ready deployment
 
 ## Technology
 
 - Python and Flask
 - JavaScript, HTML, and CSS
 - FASHN Virtual Try-On API
-- Render-ready deployment configuration
+- Gunicorn for production serving
+- Render for cloud deployment
 
-## Run locally
+## Local setup
 
-1. Create a Python virtual environment.
-2. Install dependencies:
+1. Create and activate a Python virtual environment.
+2. Install the dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Create a `.env` file:
+3. Copy `.env.example` to `.env` and add your FASHN API key:
 
    ```text
    FASHN_API_KEY=your_api_key
@@ -49,9 +53,13 @@ The project supports a controlled comparison between:
 
 The standard comparison store is available at `/normal.html`.
 
+## Deployment
+
+The included `render.yaml` describes the web service. Add `FASHN_API_KEY` as a secret environment variable in Render before deploying.
+
 ## Security
 
-API credentials are never committed. Store the FASHN key in `.env` locally or as a secure environment variable on the hosting platform.
+The real `.env` file is excluded from version control. Never commit API keys or other credentials.
 
 ## Research context
 

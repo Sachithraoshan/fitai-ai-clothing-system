@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FitAI - Smart Fashion</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">FitAI</div>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Men</a>
+        <a href="#">Women</a>
+        <a href="#">My Recommendations</a>
+    </nav>
+</header>
+
+
+<section class="hero">
+
+    <div>
+        <h1>Find Clothes Made For You</h1>
+
+        <p>
+            Tell us what you like and our AI will recommend
+            the best available clothes for you.
+        </p>
+    </div>
+
+</section>
+
+
+<section class="recommendation-box">
+
+    <h2>Tell Us Your Preferences</h2>
+
+    <div class="form-grid">
+
+        <div>
+            <label>Clothing Type</label>
+
+            <select id="type">
+                <option value="shirt">Shirt</option>
+                <option value="tshirt">T-Shirt</option>
+            </select>
+        </div>
+
+
+        <div>
+            <label>Size</label>
+
+            <select id="size">
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+            </select>
+        </div>
+
+
+        <div>
+            <label>Color</label>
+
+            <select id="color">
+                <option value="black">Black</option>
+                <option value="white">White</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+            </select>
+        </div>
+
+
+        <div>
+            <label>Style</label>
+
+            <select id="style">
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+                <option value="streetwear">Streetwear</option>
+            </select>
+        </div>
+
+
+        <div>
+            <label>Maximum Budget (Rs.)</label>
+
+            <input
+                type="number"
+                id="budget"
+                placeholder="Example: 5000"
+            >
+        </div>
+
+    </div>
+
+
+    <button class="main-button" onclick="recommend()">
+        ✨ Find My Clothes
+    </button>
+
+</section>
+
+
+<section class="products-section">
+
+    <div class="section-title">
+        <h2>Recommended For You</h2>
+        <p>AI ranked products based on your preferences.</p>
+    </div>
+
+    <div id="results" class="product-grid"></div>
+
+</section>
+
+
+<script src="products.js"></script>
+<script src="script.js"></script>
+
+</body>
+
+</html>

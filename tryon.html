@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FitAI - Virtual Try-On</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+    <div class="logo">FitAI</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="index.html">Recommendations</a>
+        <a href="#" class="active-link">Virtual Try-On</a>
+    </nav>
+</header>
+
+
+<!-- HERO -->
+
+<section class="tryon-hero">
+
+    <div class="tryon-hero-content">
+
+        <span class="ai-badge">
+            ✨ AI Powered
+        </span>
+
+        <h1>Virtual Dressing Room</h1>
+
+        <p>
+            Upload your photo and see how your selected clothing
+            may look on you before making your decision.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- MAIN AREA -->
+
+<section class="tryon-container">
+
+    <div class="tryon-card">
+
+
+        <!-- STEP 1 -->
+
+        <div class="upload-section">
+
+            <div class="step-number">1</div>
+
+            <h2>Upload Your Photo</h2>
+
+            <p class="small-text">
+                For better results, use a clear full-body photo.
+            </p>
+
+
+            <!-- UPLOAD BOX -->
+
+            <label class="upload-box" id="uploadBox">
+
+                <div id="uploadContent">
+
+                    <div class="upload-icon">
+                        📷
+                    </div>
+
+                    <h3>Choose Your Photo</h3>
+
+                    <p>JPG, JPEG or PNG</p>
+
+                    <span class="upload-help">
+                        Click here to upload
+                    </span>
+
+                </div>
+
+
+                <input
+                    type="file"
+                    id="userPhoto"
+                    accept="image/jpeg,image/jpg,image/png"
+                    onchange="showPreview()"
+                >
+
+            </label>
+
+
+            <div
+                id="photoActions"
+                class="photo-actions"
+                style="display:none;"
+            >
+
+                <button
+                    class="change-photo-button"
+                    onclick="changePhoto()"
+                >
+                    Change Photo
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- STEP 2 -->
+
+        <div class="generation-section">
+
+            <div class="step-number">2</div>
+
+            <h2>Generate Your Look</h2>
+
+            <p class="small-text">
+                AI will combine your photo with the clothing you selected.
+            </p>
+            <div id="selectedClothing" class="selected-clothing"></div>
+
+
+            <!-- AI PROCESS -->
+
+            <div class="ai-info">
+
+                <div class="ai-item">
+                    <div class="ai-icon">👤</div>
+                    <span>Your Photo</span>
+                </div>
+
+
+                <div class="plus">+</div>
+
+
+                <div class="ai-item">
+                    <div class="ai-icon">👕</div>
+                    <span>Selected Clothing</span>
+                </div>
+
+
+                <div class="plus">=</div>
+
+
+                <div class="ai-item">
+                    <div class="ai-icon">✨</div>
+                    <span>AI Try-On</span>
+                </div>
+
+            </div>
+
+
+            <!-- GENERATE BUTTON -->
+
+            <button
+                id="generateButton"
+                class="generate-button"
+                onclick="generateTryOn()"
+            >
+                ✨ Generate AI Try-On
+            </button>
+
+
+            <!-- OUTPUT AREA -->
+
+            <div id="resultArea">
+
+                <div class="result-placeholder">
+
+                    <div class="result-icon">
+                        🪄
+                    </div>
+
+                    <h3>
+                        Your AI Look Will Appear Here
+                    </h3>
+
+                    <p>
+                        Upload your photo and generate your
+                        virtual fitting result.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* =====================================
+   SHOW UPLOADED IMAGE
+===================================== */
+
+function showPreview() {
+
+    const input =
+        document.getElementById("userPhoto");
+
+    const file =
+        input.files[0];
+
+
+    if (!file) {
+        return;
+    }
+
+
+    /* Check file type */
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png"
+    ];
+
+
+    if (!allowedTypes.includes(file.type)) {
+
+        alert(
+            "Please upload JPG, JPEG or PNG image."
+        );
+
+        input.value = "";
+
+        return;
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function(event) {
+
+        const uploadContent =
+            document.getElementById(
+                "uploadContent"
+            );
+
+
+        uploadContent.innerHTML = `
+
+            <img
+                src="${event.target.result}"
+                class="inside-preview"
+                alt="Uploaded customer photo"
+            >
+
+        `;
+
+
+        document.getElementById(
+            "photoActions"
+        ).style.display = "block";
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+
+/* =====================================
+   CHANGE PHOTO
+===================================== */
+
+function changePhoto() {
+
+    document.getElementById(
+        "userPhoto"
+    ).click();
+
+}
+
+
+
+/* =====================================
+   GENERATE AI TRY-ON
+===================================== */
+async function generateTryOn() {
+
+    const photoInput =
+        document.getElementById("userPhoto");
+
+    const file =
+        photoInput.files[0];
+
+
+    if (!file) {
+
+        alert("Please upload your photo first.");
+
+        return;
+    }
+
+
+    const selectedProduct =
+        JSON.parse(
+            localStorage.getItem("selectedProduct")
+        );
+
+
+    if (!selectedProduct) {
+
+        alert("No clothing item selected.");
+
+        return;
+    }
+
+
+    const button =
+        document.getElementById("generateButton");
+
+
+    button.disabled = true;
+
+    button.innerHTML =
+        "✨ AI is generating your look...";
+
+
+    document.getElementById(
+        "resultArea"
+    ).innerHTML = `
+
+        <div class="loading-box">
+
+            <div class="spinner"></div>
+
+            <h3>
+                Creating Your Virtual Try-On
+            </h3>
+
+            <p>
+                Please wait a few seconds...
+            </p>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "userPhoto",
+            file
+        );
+
+
+        formData.append(
+            "productId",
+            selectedProduct.id
+        );
+
+
+        const response =
+            await fetch("/tryon",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error ||
+                "AI generation failed."
+            );
+        }
+
+
+        document.getElementById(
+            "resultArea"
+        ).innerHTML = `
+
+            <div class="ai-result">
+
+                <img
+                    src="${data.image}"
+                    class="generated-image"
+                    alt="AI Virtual Try-On Result"
+                >
+
+                <h3>
+                    ✨ Your Virtual Try-On
+                </h3>
+
+                <p>
+                    This AI-generated image is a
+                    visual preview of the selected clothing.
+                </p>
+
+            </div>
+
+        `;
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "resultArea"
+        ).innerHTML = `
+
+            <div class="error-box">
+
+                <h3>
+                    Generation Failed
+                </h3>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    button.disabled = false;
+
+    button.innerHTML =
+        "✨ Generate AI Try-On";
+
+}
+
+</script>
+
+
+</body>
+
+</html>
